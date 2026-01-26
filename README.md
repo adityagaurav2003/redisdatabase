@@ -1,291 +1,222 @@
-Redis Server (C++)
+# Redis Server (C++)
 
-A lightweight Redis-like in-memory database server implemented in C++17.
-The project focuses on understanding low-level systems concepts such as TCP networking, concurrency, protocol parsing, and data persistence.
+A Redis-like in-memory database server implemented in **C++17**.  
+Built to understand networking, concurrency, protocol parsing, and data storage at a low level.
 
-The server is compatible with redis-cli and supports a subset of Redis commands.
+> Educational systems project. Not production-ready.
 
-Overview
+---
 
-This project implements a custom key–value database server with the following goals:
+## Features
 
-Learn how Redis works internally
+- Redis-cli compatible
+- TCP/IP socket-based server
+- Multiple client support
+- RESP protocol parsing
+- Thread-per-client concurrency model
+- Mutex-based synchronization
+- In-memory storage
+- Key expiration (TTL)
+- Periodic and shutdown persistence
 
-Build a TCP server from scratch
+---
 
-Implement the RESP protocol
+## Architecture
 
-Handle concurrent clients safely
-
-Design in-memory data structures
-
-Persist data to disk
-
-This is not a production replacement for Redis.
-It is a systems-level learning project.
-
-Key Features
-
-TCP server with multiple client support
-
-RESP protocol parsing
-
-Thread-per-client concurrency model
-
-Mutex-protected shared database
-
-Support for Strings, Lists, and Hashes
-
-Key expiration (TTL)
-
-Periodic and shutdown persistence
-
-Compatible with redis-cli
-
-Architecture
 Client (redis-cli)
-        |
-     TCP Socket
-        |
-   RedisServer
-        |
- RedisCommandHandler
-        |
- RedisDatabase (Singleton)
-
-Concurrency Model
-
-One thread per client connection
-
-Single shared database instance
-
-Global mutex ensures data consistency
-
-Simple, predictable, and safe design
-
-Core Concepts Used
-
-TCP/IP and socket programming
-
-Multithreading and synchronization
-
-Mutexes and critical sections
-
-RESP protocol parsing
-
-In-memory data structures
-
-File I/O and persistence
-
-Signal handling
-
-Singleton design pattern
-
-Bitwise operators (|=)
-
-C++ standard library usage
-
-Main Components
+|
+TCP
+|
 RedisServer
-
-Initializes socket
-
-Accepts client connections
-
-Spawns client handler threads
-
+|
 RedisCommandHandler
+|
+RedisDatabase (Singleton)
 
-Parses RESP input
+yaml
+Copy code
 
-Validates commands
+---
 
-Dispatches operations
+## Concepts Used
 
-Formats responses
+- TCP/IP and Socket Programming
+- Concurrency and Multithreading
+- Mutex and Synchronization
+- Data Structures (Hash Tables, Vectors)
+- RESP Protocol Parsing
+- File I/O Persistence
+- Signal Handling
+- Command Processing & Response Formatting
+- Singleton Pattern
+- Bitwise Operators (`|=`)
+- C++ Standard Libraries
 
-RedisDatabase
+---
 
-Stores all data
+## Core Classes
 
-Manages TTL
+### RedisServer
+- Initializes TCP socket
+- Accepts client connections
+- Spawns client threads
 
-Handles persistence
+### RedisCommandHandler
+- Parses RESP input
+- Validates commands
+- Dispatches operations
+- Formats responses
 
-Implemented as a singleton
+### RedisDatabase
+- Stores all data
+- Manages TTL
+- Handles persistence
+- Implemented as Singleton
 
-Project Structure
-.
-├── include/
-│   ├── RedisServer.h
-│   ├── RedisCommandHandler.h
-│   └── RedisDatabase.h
-│
-├── src/
-│   ├── RedisServer.cpp
-│   ├── RedisCommandHandler.cpp
-│   ├── RedisDatabase.cpp
-│   └── main.cpp
-│
-├── Makefile
-├── test_all.sh
-└── README.md
+---
 
-Setup
-Requirements
+## How to Build and Run
 
-Linux / macOS / Windows (WSL recommended)
-
-g++ with C++17 support
-
+```bash
 make
-
-redis-cli (for testing)
-
-Ubuntu
-sudo apt update
-sudo apt install g++ make redis-tools
-
-macOS
-brew install gcc make redis
-
-Build
-make
-
-
-Clean build files:
-
-make clean
-
-Run
-Default Port (6379)
-./my_redis_server
-
-Custom Port
-./my_redis_server 6380
-
+./my_redis_server        # default port 6379
+./my_redis_server 6380   # custom port
 Connect Using redis-cli
+bash
+Copy code
 redis-cli -p 6379
-
-
-Test connection:
-
 PING
-
-
 Expected response:
 
+nginx
+Copy code
 PONG
-
-Supported Commands and Use Cases
+Commands & Use Cases
 Common Commands
-
 PING
-Used to check server availability
+Use case: Check if the server is alive before performing operations.
 
 ECHO
-Used for connectivity and debugging
+Use case: Debugging and connectivity testing.
 
 FLUSHALL
-Clears all stored data (useful during development)
+Use case: Clear all stored data during development or cache reset.
 
 Key / Value Operations
+SET
+Use case: Cache session data or configuration values.
 
-SET / GET
-Cache sessions, tokens, configuration values
+GET
+Use case: Retrieve cached data.
 
 KEYS
-Inspect stored keys or patterns
+Use case: Inspect keys or perform maintenance tasks.
 
 TYPE
-Determine data type of a key
+Use case: Identify the stored data type.
 
 DEL / UNLINK
-Remove unused or expired keys
+Use case: Remove stale or invalid keys.
 
 EXPIRE
-Automatically expire cached data
+Use case: Auto-expiring cached entries.
 
 RENAME
-Rename keys without losing data
+Use case: Rename keys without data loss.
 
 List Operations
-
-LPUSH / RPUSH
-Task queues, message buffers
-
-LPOP / RPOP
-Job or message consumption
+LGET
+Use case: Retrieve all list elements.
 
 LLEN
-Queue size monitoring
+Use case: Check queue length.
 
-LGET
-Retrieve all list elements
+LPUSH / RPUSH
+Use case: Add tasks to a queue.
 
-LINDEX
-Inspect specific list elements
-
-LSET
-Modify list entries in place
+LPOP / RPOP
+Use case: Consume tasks from queue.
 
 LREM
-Remove specific list values
+Use case: Remove specific list values.
+
+LINDEX
+Use case: Inspect a list element without removal.
+
+LSET
+Use case: Update a list entry.
 
 Hash Operations
-
-HSET / HMSET
-Store structured objects (user profiles)
+HSET
+Use case: Store structured objects (user profiles).
 
 HGET
-Fetch individual fields
+Use case: Retrieve a specific field.
 
 HEXISTS
-Check field existence
+Use case: Check field existence.
 
 HDEL
-Remove outdated fields
-
-HLEN
-Count stored fields
-
-HKEYS / HVALS
-Iterate over fields or values
+Use case: Remove outdated fields.
 
 HGETALL
-Retrieve full object data
+Use case: Retrieve full object data.
+
+HKEYS / HVALS
+Use case: Iterate over fields or values.
+
+HLEN
+Use case: Count number of fields.
+
+HMSET
+Use case: Set multiple fields at once.
+
+Testing
+1. Start Server
+bash
+Copy code
+./my_redis_server 6379
+2. Connect
+bash
+Copy code
+redis-cli -p 6379
+3. Common Commands
+Command	Example	Expected
+PING	PING	PONG
+ECHO	ECHO "Hello"	Hello
+FLUSHALL	FLUSHALL	OK
+
+4. Key / Value Tests
+Command	Example	Expected
+SET/GET	SET a x → GET a	"x"
+KEYS	KEYS *	key list
+TYPE	TYPE a	string
+DEL	DEL a	(integer) 1
+EXPIRE	EXPIRE a 5	OK
+RENAME	RENAME a b	OK
+
+Tip: After EXPIRE, access the key after TTL to verify deletion.
+
+5. List Tests
+Command	Example	Expected
+LGET	RPUSH L a b c	list
+LLEN	LLEN L	(integer) 3
+LPOP	LPOP L	"a"
+LSET	LSET L 1 x	OK
+
+6. Hash Tests
+Command	Example	Expected
+HSET	HSET user:1 name Alice	(integer) 1
+HGET	HGET user:1 name	"Alice"
+HEXISTS	HEXISTS user:1 name	(integer) 1
+HGETALL	HGETALL user:1	fields + values
 
 Persistence
+Data stored in dump.my_rdb
 
-Data saved to dump.my_rdb
-
-Loaded automatically on startup
+Loaded on startup
 
 Auto-save every 300 seconds
 
-Saved on graceful shutdown (Ctrl + C)
+Saved on graceful shutdown
 
-Note:
-Persistence format is custom and not Redis RDB compatible.
-
-Testing
-Start Server
-./my_redis_server 6379
-
-Connect
-redis-cli -p 6379
-
-Run Test Script
-./test_all.sh
-
-Internal Data Structures
-
-Strings → unordered_map<string, string>
-
-Lists → unordered_map<string, vector<string>>
-
-Hashes → unordered_map<string, unordered_map<string, string>>
-
-TTL tracking → unordered_map<string, time_t>
-
-Synchronization → single global mutex
