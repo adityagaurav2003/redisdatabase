@@ -3,7 +3,6 @@
 A Redis-like in-memory database server implemented in **C++17**.  
 Built to understand networking, concurrency, protocol parsing, and data storage at a low level.
 
-> Educational systems project. Not production-ready.
 
 ---
 
@@ -33,10 +32,7 @@ RedisCommandHandler
 |
 RedisDatabase (Singleton)
 
-yaml
-Copy code
 
----
 
 ## Concepts Used
 
@@ -77,20 +73,16 @@ Copy code
 
 ## How to Build and Run
 
-```bash
+
 make
 ./my_redis_server        # default port 6379
 ./my_redis_server 6380   # custom port
 Connect Using redis-cli
-bash
-Copy code
 redis-cli -p 6379
 PING
 Expected response:
-
-nginx
-Copy code
 PONG
+
 Commands & Use Cases
 Common Commands
 PING
@@ -173,12 +165,10 @@ Use case: Set multiple fields at once.
 
 Testing
 1. Start Server
-bash
-Copy code
+
 ./my_redis_server 6379
 2. Connect
-bash
-Copy code
+
 redis-cli -p 6379
 3. Common Commands
 Command	Example	Expected
