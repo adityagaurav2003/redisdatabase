@@ -201,12 +201,9 @@ HGET	HGET user:1 name	"Alice"
 HEXISTS	HEXISTS user:1 name	(integer) 1
 HGETALL	HGETALL user:1	fields + values
 
-Persistence
+Persistence:
 Data stored in dump.my_rdb
-
 Loaded on startup
-
 Auto-save every 300 seconds
-
 Saved on graceful shutdown
 
